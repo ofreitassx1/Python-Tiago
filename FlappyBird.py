@@ -5,7 +5,7 @@ import random
 TELA_LARGURA = 500
 TELA_ALTURA = 800
 
-IMAGEM_CANO = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "pip.png")))
+IMAGEM_CANO = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "pipe.png")))
 IMAGEM_CHAO = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "base.png")))
 IMAGEM_BACKGROUND = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "bg.png")))
 IMAGENS_PASSARO = [
@@ -49,15 +49,15 @@ class Passaro:
         if deslocamento > 16:
             deslocamento = 16
         elif deslocamento < 0:
-            deslocamento -= 2
-        self.y = deslocamento
+            deslocamento -= 2  
+        self.y += deslocamento
 
         #angulo do passsaro
         if deslocamento < 0 or self.y < (self.altura + 50):
             if self.angulo < self.ROTACAO_MAXIMA:
                 self.angulo = self.ROTACAO_MAXIMA
         else:
-            if self.angulo > 90:
+            if self.angulo > -90:
                 self.angulo -= self.VELOCIDADE_ROTACAO
         
     def desenhar(self, tela):
@@ -84,7 +84,7 @@ class Passaro:
         #desenhar imagem
         imagem_rotacionada = pygame.transform.rotate(self.imagem, self.angulo)
         pos_centro_imagem = self.imagem.get_rect(topleft=(self.x, self.y)).center
-        retangulo = imagem_rotacionada.ger_rect(center=pos_centro_imagem)
+        retangulo = imagem_rotacionada.get_rect(center=pos_centro_imagem)
         tela.blit(imagem_rotacionada, retangulo.topleft)
     
     def get_mask(self):
@@ -111,7 +111,7 @@ class Cano:
         self.pos_topo = self.altura + self.DISTANCIA
     
     def mover(self):
-        self.x -= self.VELOCIDADE
+        self.x -= self.VELOCIDADE  
 
     
 
@@ -132,7 +132,7 @@ class Cano:
         base_ponto = passaro_mask.overlap(base_mask, distancia_base)
 
         if base_ponto or topo_ponto:
-            return True
+            return True 
         else:
             return False
     
@@ -173,7 +173,7 @@ def desenhar_tela(tela, passaros, canos, chao, pontos):
     for cano in canos:
         cano.desenhar(tela)
     
-    texto = FONTE_PONTOS.render(f"Pontuação: {pontos}", 1, {255,255,255})
+    texto = FONTE_PONTOS.render(f"Pontuação: {pontos}", 1, (255,255,255))
     tela.blit(texto, (TELA_LARGURA - 10 - texto.get_width(), 10))
     chao.desenhar(tela)
     pygame.display.update()
